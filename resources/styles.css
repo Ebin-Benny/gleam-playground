@@ -1,0 +1,60 @@
+canvas {
+  display: block;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  border:1px solid #000000;
+}
+
+p {
+  font-size: 1.5em;
+  background-color: var(--vscode-activityBar-background);
+  color: var(--vscode-activityBar-foreground);
+  padding: 5px;
+  margin: 5px;
+}
+
+.play {
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
+  margin-right: 5px;
+  background-image: url("images/baseline_pause_white_48dp.png");
+  background-color: var(--vscode-activityBar-background);
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: 60%; /* Resize the background image to cover the entire container */
+  border-radius: 10%;
+  border: none;
+}
+
+.play:hover {
+  background-color: var(--vscode-activityBar-foreground);
+  background-image: url("images/baseline_pause_black_48dp.png");
+}
+
+.restart {
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
+  margin-right: 5px;
+  background-image: url("images/baseline_restore_white_48dp.png");
+  background-color: var(--vscode-activityBar-background);
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: 60%; /* Resize the background image to cover the entire container */
+  border-radius: 10%;
+  border: none;
+}
+
+.restart:hover {
+  background-color: var(--vscode-activityBar-foreground);
+  background-image: url("images/baseline_restore_black_48dp.png");
+}
+
+.buttons {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
