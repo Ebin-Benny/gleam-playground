@@ -1,8 +1,11 @@
 {
   "name": "gleam-playground",
   "displayName": "Gleam Playground",
+  "version": "1.0.0",
+  "publisher": "Ebin-Benny",
+  "repository": "https://github.com/Ebin-Benny/gleam-playground",
+  "icon": "resources/images/play.png",
   "description": "Interactive playground for the Haskell Gleam library.",
-  "version": "0.0.1",
   "engines": {
     "vscode": "^1.44.0"
   },

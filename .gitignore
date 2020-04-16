@@ -107,5 +107,8 @@ dist
 out
 
 # Playground folder
-
 .playground
+
+# vsix
+*.vsix
+
