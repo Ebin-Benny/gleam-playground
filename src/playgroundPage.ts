@@ -3,11 +3,11 @@ import * as vscode from "vscode";
 
 let page: string = "";
 
-export const playgroundPageHTML = async (
+export const playgroundPageHTML = (
   context: vscode.ExtensionContext,
   panel: vscode.WebviewPanel
-): Promise<string> => {
-  if (page !== "") {
+): string => {
+  if (page === "") {
     const scriptPathOnDisk = vscode.Uri.file(
       path.join(context.extensionPath, "resources", "haskell.js")
     );

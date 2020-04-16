@@ -3,15 +3,15 @@ import * as vscode from "vscode";
 
 let page: string = "";
 
-export const loadingPageHTML = async (
+export const loadingPageHTML = (
   context: vscode.ExtensionContext,
   panel: vscode.WebviewPanel
-): Promise<string> => {
+): string => {
   const stylePathOnDisk = vscode.Uri.file(
     path.join(context.extensionPath, "resources", "loadingStyles.css")
   );
 
-  if (page !== "") {
+  if (page === "") {
     const styleUri = panel.webview.asWebviewUri(stylePathOnDisk);
 
     page = `<!doctype html>

@@ -1,15 +1,14 @@
 import * as vscode from "vscode";
+import * as os from "os";
+
 import { sleep } from "./utility";
 import { playgroundPageHTML } from "./playgroundPage";
 
-export const runExpressions = async (
-  context: vscode.ExtensionContext,
+const runExpressions = async (
   terminal: vscode.Terminal,
-  doc: vscode.TextDocument,
-  panel: vscode.WebviewPanel
+  doc: vscode.TextDocument
 ) => {
   let playStatements = [];
-  const playgroundPage = await playgroundPageHTML(context, panel);
 
   terminal.sendText(":{");
 
@@ -21,9 +20,9 @@ export const runExpressions = async (
         textLine.text.startsWith("play ")
       ) {
         playStatements.push(
-          `(Simulation  ${textLine.text.substring(5)} "${
-            textLine.lineNumber
-          }: ${textLine.text}")`
+          `(Simulation ${textLine.text.substring(5)} "${textLine.lineNumber}: ${
+            textLine.text
+          }")`
         );
       } else {
         terminal.sendText(textLine.text);
@@ -38,6 +37,18 @@ export const runExpressions = async (
 
   terminal.sendText(":}");
   terminal.sendText("main");
+};
+
+export const runInitialExpressions = async (
+  context: vscode.ExtensionContext,
+  terminal: vscode.Terminal,
+  doc: vscode.TextDocument,
+  panel: vscode.WebviewPanel
+) => {
+  const playgroundPage = playgroundPageHTML(context, panel);
+
+  await runExpressions(terminal, doc);
+
   await sleep(1500);
   panel.webview.html = playgroundPage;
 };
@@ -48,17 +59,31 @@ export const rerunExpressions = async (
   doc: vscode.TextDocument,
   panel: vscode.WebviewPanel
 ) => {
-  terminal.sendText("\u0003", false);
-  await runExpressions(context, terminal, doc, panel);
+  await reload(terminal);
+
+  await runExpressions(terminal, doc);
 };
 
-export const run = async (
+const run = async (
   context: vscode.ExtensionContext,
   terminal: vscode.Terminal,
   panel: vscode.WebviewPanel
 ) => {
-  const playgroundPage = await playgroundPageHTML(context, panel);
+  const playgroundPage = playgroundPageHTML(context, panel);
   terminal.sendText("main");
+  await sleep(1500);
+  panel.webview.html = playgroundPage;
+};
+
+export const runInitial = async (
+  context: vscode.ExtensionContext,
+  terminal: vscode.Terminal,
+  panel: vscode.WebviewPanel
+) => {
+  const playgroundPage = playgroundPageHTML(context, panel);
+
+  await run(context, terminal, panel);
+
   await sleep(1500);
   panel.webview.html = playgroundPage;
 };
@@ -68,6 +93,23 @@ export const rerun = async (
   terminal: vscode.Terminal,
   panel: vscode.WebviewPanel
 ) => {
-  terminal.sendText("\u0003", false);
+  await reload(terminal);
+
   await run(context, terminal, panel);
+};
+
+const reload = async (terminal: vscode.Terminal) => {
+  switch (os.platform()) {
+    case "win32":
+      terminal.sendText("\u0003", false);
+      terminal.sendText("\u0003", false);
+      terminal.sendText(":quit");
+      await sleep(500);
+      terminal.sendText("cabal repl");
+      await sleep(1000);
+      break;
+    default:
+      terminal.sendText("\u0003", false);
+      terminal.sendText(":reload");
+  }
 };

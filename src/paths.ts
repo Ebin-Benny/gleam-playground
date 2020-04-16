@@ -1,7 +1,9 @@
 import * as os from "os";
 import * as vscode from "vscode";
 
-export const playgroundUri = (context: vscode.ExtensionContext): vscode.Uri => {
+export const playgroundFileUri = (
+  context: vscode.ExtensionContext
+): vscode.Uri => {
   let uri: vscode.Uri;
 
   switch (os.platform()) {
@@ -13,6 +15,26 @@ export const playgroundUri = (context: vscode.ExtensionContext): vscode.Uri => {
     default:
       uri = vscode.Uri.parse(
         `file://${context.extensionPath}/.playground/playground${vscode.workspace.name}/playground.hs`
+      );
+  }
+
+  return uri;
+};
+
+export const playgroundUntitledUri = (
+  context: vscode.ExtensionContext
+): vscode.Uri => {
+  let uri: vscode.Uri;
+
+  switch (os.platform()) {
+    case "win32":
+      uri = vscode.Uri.parse(
+        `untitled:${context.extensionPath}\\.playground\\playground${vscode.workspace.name}\\playground.hs`
+      );
+      break;
+    default:
+      uri = vscode.Uri.parse(
+        `untitled://${context.extensionPath}/.playground/playground${vscode.workspace.name}/playground.hs`
       );
   }
 

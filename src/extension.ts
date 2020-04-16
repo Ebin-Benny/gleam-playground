@@ -3,7 +3,7 @@ import { startPlayground } from "./playground";
 
 export const activate = (context: vscode.ExtensionContext) => {
   let playgroundCommand = vscode.commands.registerCommand(
-    "gleamplayground.play",
+    "gleam-playground.play",
     () => {
       startPlayground(context);
     }

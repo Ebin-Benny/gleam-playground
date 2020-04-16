@@ -1,11 +1,18 @@
 import * as path from "path";
 import * as vscode from "vscode";
 import { sleep } from "./utility";
-import { playgroundUri, isPlaygroundFile } from "./paths";
+import {
+  playgroundFileUri,
+  playgroundUntitledUri,
+  isPlaygroundFile,
+} from "./paths";
 import { loadingPageHTML } from "./loadingPage";
-import { playgroundPageHTML } from "./playgroundPage";
-import { runExpressions, run, rerunExpressions, rerun } from "./commands";
-import { platform } from "os";
+import {
+  runInitialExpressions,
+  runInitial,
+  rerunExpressions,
+  rerun,
+} from "./commands";
 
 export const startPlayground = async (context: vscode.ExtensionContext) => {
   const terminal = vscode.window.createTerminal("playground");
@@ -22,29 +29,29 @@ export const startPlayground = async (context: vscode.ExtensionContext) => {
     }
   );
 
+  terminal.show();
+
   terminal.sendText("cabal repl");
   await sleep(1000);
 
-  const uri = playgroundUri(context);
-  const loadingPage = await loadingPageHTML(context, panel);
+  const loadingPage = loadingPageHTML(context, panel);
+  panel.webview.html = loadingPage;
 
   /// Playground startup
 
-  vscode.workspace.openTextDocument().then(
+  vscode.workspace.openTextDocument(playgroundFileUri(context)).then(
     async (doc) => {
-      panel.webview.html = loadingPage;
       vscode.window.showTextDocument(doc, {
-        viewColumn: vscode.ViewColumn.Active,
+        viewColumn: vscode.ViewColumn.One,
       });
-      await runExpressions(context, terminal, doc, panel);
+      await runInitialExpressions(context, terminal, doc, panel);
     },
     (err) => {
-      vscode.workspace.openTextDocument(uri).then(
+      vscode.workspace.openTextDocument(playgroundUntitledUri(context)).then(
         async (doc) => {
           vscode.window.showTextDocument(doc, {
-            viewColumn: vscode.ViewColumn.Active,
+            viewColumn: vscode.ViewColumn.One,
           });
-          await run(context, terminal, panel);
         },
         (err) => {
           console.log(err);
@@ -59,12 +66,21 @@ export const startPlayground = async (context: vscode.ExtensionContext) => {
     if (isPlaygroundFile(context, doc.fileName)) {
       await rerunExpressions(context, terminal, doc, panel);
     } else {
-      vscode.workspace.openTextDocument(uri).then(
+      vscode.workspace.openTextDocument(playgroundFileUri(context)).then(
         async (doc) => {
           await rerun(context, terminal, panel);
         },
         (err) => {
-          console.log(err);
+          vscode.workspace
+            .openTextDocument(playgroundUntitledUri(context))
+            .then(
+              async (doc) => {
+                await rerun(context, terminal, panel);
+              },
+              (err) => {
+                console.log(err);
+              }
+            );
         }
       );
     }
