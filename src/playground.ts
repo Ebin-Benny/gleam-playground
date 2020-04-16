@@ -29,11 +29,6 @@ export const startPlayground = async (context: vscode.ExtensionContext) => {
     }
   );
 
-  terminal.show();
-
-  terminal.sendText("cabal repl");
-  await sleep(1000);
-
   const loadingPage = loadingPageHTML(context, panel);
   panel.webview.html = loadingPage;
 

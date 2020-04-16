@@ -9,7 +9,17 @@ export const activate = (context: vscode.ExtensionContext) => {
     }
   );
 
+  let statusBarItem = vscode.window.createStatusBarItem(
+    vscode.StatusBarAlignment.Right,
+    100
+  );
+  statusBarItem.command = "gleam-playground.play";
+
+  context.subscriptions.push(statusBarItem);
   context.subscriptions.push(playgroundCommand);
+
+  statusBarItem.text = `$(play) Run Gleam Playground`;
+  statusBarItem.show();
 };
 
 export const deactivate = () => {};

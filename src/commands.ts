@@ -45,6 +45,11 @@ export const runInitialExpressions = async (
   doc: vscode.TextDocument,
   panel: vscode.WebviewPanel
 ) => {
+  terminal.show();
+
+  terminal.sendText("cabal repl");
+  await sleep(1000);
+
   const playgroundPage = playgroundPageHTML(context, panel);
 
   await runExpressions(terminal, doc);
@@ -80,6 +85,11 @@ export const runInitial = async (
   terminal: vscode.Terminal,
   panel: vscode.WebviewPanel
 ) => {
+  terminal.show();
+
+  terminal.sendText("cabal repl");
+  await sleep(1000);
+
   const playgroundPage = playgroundPageHTML(context, panel);
 
   await run(context, terminal, panel);
