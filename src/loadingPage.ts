@@ -20,7 +20,7 @@ export const loadingPageHTML = (
               <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   
               <title>Playground</title>
-              <link rel="stylesheet" type="text/css" href="${styleUri.toString()}"/>
+              <link rel="stylesheet" type="text/css" href="https://gleamplayground.blob.core.windows.net/playground/loadingStyles.css"/>
           </head>
           <body>
               <div class="parent">
