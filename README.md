@@ -1,23 +1,33 @@
-# gleam-playground README
+# Gleam Playground
 
-Playground for Gleam.
+An interactive playground for the Gleam graphics library.
 
 ## Features
 
-Interactive playground with an editor and viewer.
+Interactive playground with an editor and viewer. Uses GHCi to interpret and run the playground on top of the project.
 
 ## Requirements
 
-Cabal must be installed. <https://www.haskell.org/cabal/download.html>
+The workspace should contain a Cabal or Stack project 
+* Cabal - <https://www.haskell.org/cabal/download.html>
+* Stack - <https://docs.haskellstack.org/en/stable/README/>
 
-Project must be a Gleam project, it must include Gleam in the dependencies. <https://hackage.haskell.org/package/Gleam>
+The project must be a Gleam project; it must include Gleam in the dependencies. <https://hackage.haskell.org/package/Gleam>
 
+## Usage
+
+1. Run the playground using the status bar button.
+2. Enter expressions in the playground to be on the result view.
+    * To show a canvas on the page, use a `play` statement or redefine the main of the program.
+    * To show multiple canvases on the mage, use multiple `play` statements.
+  
 ## Known Issues
 
-Calling
+If the result view does not show, run the playground again.
+
 
 ## Release Notes
 
 ### 1.0.0
 
-Initial release of Gleam Playground.
+Initial release of the Gleam Playground.
