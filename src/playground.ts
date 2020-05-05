@@ -1,6 +1,7 @@
 import * as path from "path";
 import * as vscode from "vscode";
-import { sleep } from "./utility";
+import * as util from "util";
+import { exec as e } from "child_process";
 import {
   playgroundFileUri,
   playgroundUntitledUri,
@@ -13,6 +14,8 @@ import {
   rerunExpressions,
   rerun,
 } from "./commands";
+
+const exec = util.promisify(e);
 
 export const startPlayground = async (context: vscode.ExtensionContext) => {
   const terminal = vscode.window.createTerminal("playground");
@@ -32,8 +35,9 @@ export const startPlayground = async (context: vscode.ExtensionContext) => {
   const loadingPage = loadingPageHTML(context, panel);
   panel.webview.html = loadingPage;
 
-  /// Playground startup
+  await exec("cabal build", { cwd: vscode.workspace.rootPath });
 
+  /// Playground startup
   vscode.workspace.openTextDocument(playgroundFileUri(context)).then(
     async (doc) => {
       vscode.window.showTextDocument(doc, {
