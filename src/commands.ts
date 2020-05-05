@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as os from "os";
 
-import { sleep } from "./utility";
+import { sleep, isStackProject } from "./utility";
 import { playgroundPageHTML } from "./playgroundPage";
 
 const runExpressions = async (
@@ -21,7 +21,7 @@ const runExpressions = async (
       ) {
         playStatements.push(
           `(Simulation ${textLine.text.substring(5)} "${textLine.lineNumber}: ${
-            textLine.text
+          textLine.text
           }")`
         );
       } else {
@@ -48,7 +48,7 @@ export const runInitialExpressions = async (
   terminal.show();
 
   terminal.sendText("cabal repl");
-  await sleep(1000);
+  await sleep(1500);
 
   const playgroundPage = playgroundPageHTML(context, panel);
 
@@ -87,8 +87,10 @@ export const runInitial = async (
 ) => {
   terminal.show();
 
-  terminal.sendText("cabal repl");
-  await sleep(1000);
+  const stack = await isStackProject();
+  const buildTool = (stack) ? "stack" : "cabal";
+  terminal.sendText(buildTool + " repl");
+  await sleep(1500);
 
   const playgroundPage = playgroundPageHTML(context, panel);
 
@@ -115,7 +117,9 @@ const reload = async (terminal: vscode.Terminal) => {
       terminal.sendText("\u0003", false);
       terminal.sendText(":quit");
       await sleep(500);
-      terminal.sendText("cabal repl");
+      const stack = await isStackProject();
+      const buildTool = (stack) ? "stack" : "cabal";
+      terminal.sendText(buildTool + " repl");
       await sleep(1000);
       break;
     default:

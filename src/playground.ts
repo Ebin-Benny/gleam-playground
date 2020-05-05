@@ -14,6 +14,7 @@ import {
   rerunExpressions,
   rerun,
 } from "./commands";
+import { isStackProject } from "./utility";
 
 const exec = util.promisify(e);
 
@@ -35,7 +36,9 @@ export const startPlayground = async (context: vscode.ExtensionContext) => {
   const loadingPage = loadingPageHTML(context, panel);
   panel.webview.html = loadingPage;
 
-  await exec("cabal build", { cwd: vscode.workspace.rootPath });
+  const stack = await isStackProject();
+  const buildTool = (stack) ? "stack" : "cabal";
+  await exec(buildTool + " build", { cwd: vscode.workspace.rootPath });
 
   /// Playground startup
   vscode.workspace.openTextDocument(playgroundFileUri(context)).then(
