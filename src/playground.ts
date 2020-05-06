@@ -37,7 +37,7 @@ export const startPlayground = async (context: vscode.ExtensionContext) => {
   panel.webview.html = loadingPage;
 
   const stack = await isStackProject();
-  const buildTool = (stack) ? "stack" : "cabal";
+  const buildTool = stack ? "stack" : "cabal";
   await exec(buildTool + " build", { cwd: vscode.workspace.rootPath });
 
   /// Playground startup
@@ -70,7 +70,7 @@ export const startPlayground = async (context: vscode.ExtensionContext) => {
     } else {
       vscode.workspace.openTextDocument(playgroundFileUri(context)).then(
         async (doc) => {
-          await rerun(context, terminal, panel);
+          await rerunExpressions(context, terminal, doc, panel);
         },
         (err) => {
           vscode.workspace

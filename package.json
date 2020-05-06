@@ -1,7 +1,7 @@
 {
   "name": "gleam-playground",
   "displayName": "Gleam Playground",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "publisher": "Ebin-Benny",
   "repository": "https://github.com/Ebin-Benny/gleam-playground",
   "icon": "resources/images/play.png",
